@@ -8,35 +8,59 @@
 </head>
 <body>
     <script>
-        window.fbAsyncInit = funciton = () => {
+    function statusChangeCallback(response) {
+        console.log('statusChangeCallback');
+        console.log(response);
+        if(response.status === 'connected') {
+            testAPI();
+        }else {
+            document.getElementById('status').innerHTML = "Please log " + "into this app.";
+        }
+    }
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    }
+    window.fbAsyncInit = function () {
         FB.init({
             appId : '579272015917977',
             autoLogAppEvents : true,
             xfbml : true,
             version : 'v3.2'
-        });
-            FB.AppEvents.logPageView();
-        };
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-        FB.getLoginStatus(function(response) {
+        })
+        
+        FB.getLoginStatus( function(response) {
             statusChangeCallback(response);
-            if(response.status === 'connected') {
-                document.getElementById('login-button').classList.remove('show-button');
-            } else {
-                document.getElementById('login-button').classList.add('show-button');
-            }
-        });</script>
+        });
+    };
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if(d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    
+    function testAPI() {
+        console.log('Welcome! Fetching your information...');
+        FB.api('/me', function(response) {
+            console.log('Successful login for: ' + response.name);
+            document.getElementById('status').innerHTML = 'Thanks for loggin in, ' + response.name + '!'
+        })
+    }</script>
+
+    
 
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=579272015917977&autoLogAppEvents=1"></script>
-    <h2>Hello</h2>
-    <div class="fb-login-button" data-width="" data-size="large" data-button-type="login_with" data-auto-logout-link="true" data-use-continue-as="false"></div>
+
+
+    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+    </fb:login-button>
+
+    <div id="status"></div>
+ 
     <script>
             var finished_rendering = function() {
               console.log("finished rendering plugins");
