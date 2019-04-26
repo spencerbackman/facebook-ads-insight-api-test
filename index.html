@@ -47,7 +47,6 @@
         FB.api('/me', function(response) {
             console.log('Successful login for: ' + response.name);
             document.getElementById('status').innerHTML = 'Thanks for loggin in, ' + response.name + '!';
-            document.getElementById('login.button').style.display = "none";
             FB.api(
                 "/{579272015917977}/insights",
                 function(response) {
