@@ -46,7 +46,18 @@
         console.log('Welcome! Fetching your information...');
         FB.api('/me', function(response) {
             console.log('Successful login for: ' + response.name);
-            document.getElementById('status').innerHTML = 'Thanks for loggin in, ' + response.name + '!'
+            document.getElementById('status').innerHTML = 'Thanks for loggin in, ' + response.name + '!';
+            document.getElementById('login.button').style.display = "none";
+            FB.api(
+                "/{579272015917977}/insights",
+                function(response) {
+                    console.log(response);
+                    if(reponse && !response.error) {
+                        document.getElementById('results').innerHTML(response);
+                    }
+                }
+            )
+            document.getElementById('results')
         })
     }</script>
 
@@ -56,10 +67,12 @@
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=579272015917977&autoLogAppEvents=1"></script>
 
 
-    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+    <fb:login-button id="login-button" scope="public_profile,email" onlogin="checkLoginState();">
     </fb:login-button>
 
     <div id="status"></div>
+
+    <div id="results"></div>
  
     <script>
             var finished_rendering = function() {
