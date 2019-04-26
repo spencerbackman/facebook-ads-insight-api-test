@@ -52,7 +52,7 @@
                 function(response) {
                     console.log(response);
                     if(reponse && !response.error) {
-                        document.getElementById('results').innerHTML(response);
+                        return document.getElementById('results').innerHTML(response);
                     }
                 }
             )
